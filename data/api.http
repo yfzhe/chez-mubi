@@ -1,0 +1,14 @@
+:country = US
+:page = 1
+
+# Films
+GET https://api.mubi.com/v4/browse/films?sort=popularity_quality_score&playable=true&page=:page
+Client: web
+Client-Country: :country
+Content-Type: application/json
+
+# List
+GET https://api.mubi.com/v4/browse/lists
+Client: web
+Client-Country: :country
+Content-Type: application/json

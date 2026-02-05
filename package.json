@@ -1,0 +1,10 @@
+{
+  "name": "chez-mubi",
+  "private": true,
+  "author": "yfzhe",
+  "license": "GPL-3.0-or-later",
+  "packageManager": "pnpm@10.28.2",
+  "devDependencies": {
+    "typescript": "~5.9.3"
+  }
+}
