@@ -7,8 +7,6 @@
     "strict": true,
     "noUncheckedIndexedAccess": true,
 
-    "module": "esnext",
-    "moduleResolution": "bundler",
     "verbatimModuleSyntax": true,
   },
 }
