@@ -4,6 +4,9 @@
   "version": "0.0.1",
   "type": "module",
   "author": "yfzhe",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
   "engines": {
     "node": ">= 24.0.0"
   },
