@@ -48,13 +48,13 @@ const SeriesSchema = z.object({
   season_count: z.number(),
   limited: z.boolean(),
   genres: z.array(z.string()),
-  average_rating_out_of_ten: z.number(),
-  number_of_ratings: z.number(),
-  rating_comments_count: z.number(),
+  average_rating_out_of_ten: z.nullable(z.number()),
+  number_of_ratings: z.nullable(z.number()),
+  rating_comments_count: z.nullable(z.number()),
   info_label: z.string(),
   availability: z.string(),
   availability_message: z.object({
-    detail: z.nullable(z.string()),
+    detail: z.nullable(z.union([z.string(), z.array(z.any())])),
     tile: z.nullable(
       z.object({
         type: z.string(),
@@ -69,7 +69,7 @@ const SeriesSchema = z.object({
 
 const ConsumableSchema = z.object({
   film_id: z.number(),
-  available_at: z.iso.datetime(),
+  available_at: z.nullable(z.iso.datetime()),
   expires_at: z.nullable(z.iso.datetime()),
   exclusive: z.boolean(),
   permit_download: z.boolean(),
@@ -113,7 +113,7 @@ export const FilmSchema = z.object({
   directors: z.array(DirectorSchema),
   year: z.number(),
   duration: z.number(), // in minutes
-  consumable: ConsumableSchema,
+  consumable: z.nullable(ConsumableSchema),
   historic_countries: z.array(z.string()),
   short_synopsis: z.string(),
   default_editorial: z.nullable(z.string()),
@@ -122,9 +122,8 @@ export const FilmSchema = z.object({
   average_colour_hex: z.string(),
   genres: z.array(z.string()),
   popularity: z.number(),
-  average_rating_out_of_ten: z.number(), // 1 decimal place
-  number_of_ratings: z.number(),
-  comments_count: z.number(),
+  average_rating_out_of_ten: z.nullable(z.number()), // 1 decimal place
+  number_of_ratings: z.nullable(z.number()),
   mubi_release: z.boolean(),
   trailer_id: z.nullable(z.number()),
   trailer_url: z.nullable(z.url()),
