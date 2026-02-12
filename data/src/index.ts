@@ -1,10 +1,6 @@
 import { z } from "zod";
-
 import { FilmSchema, type Film } from "./schema.ts";
-
-async function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+import { sleep } from "./utils.ts";
 
 const FilmsResponseSchema = z.object({
   films: z.array(FilmSchema),

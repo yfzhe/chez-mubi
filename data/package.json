@@ -5,6 +5,7 @@
   "type": "module",
   "author": "yfzhe",
   "scripts": {
+    "test": "node --test \"test/**/*.spec.js\"",
     "typecheck": "tsc --noEmit"
   },
   "engines": {
