@@ -7,8 +7,8 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { createHash } from "node:crypto";
 import { DatabaseSync } from "node:sqlite";
-import { takef } from "./utils.ts";
 
 const MIGRATIONS_DIR = path.join(import.meta.dirname, "../migrations");
 
@@ -43,45 +43,43 @@ function getMigrations(): Migration[] {
 function migrate(db: DatabaseSync) {
   db.exec(`
     CREATE TABLE IF NOT EXISTS _migrations (
-      id INTEGER NOT NULL
+      id INTEGER NOT NULL PRIMARY KEY,
+      checksum TEXT NOT NULL
     );
   `);
 
-  const getLatestId = db.prepare("SELECT id FROM _migrations");
-  const latestId = (getLatestId.get()?.id || 0) as number;
-
   const allMigrations = getMigrations();
-  const newMigrations = takef(
-    allMigrations,
-    (migration) => migration.id > latestId,
-  );
 
-  if (newMigrations.length === 0) {
-    return;
-  }
+  const appliedMigrations = db
+    .prepare("SELECT id, checksum FROM _migrations ORDER BY id")
+    .all() as { id: number; checksum: string }[];
 
-  console.log("find new migration(s), executing...");
-
-  const clearMigrations = db.prepare(`DELETE FROM _migrations`);
-  const insertMigrationId = db.prepare(
-    `INSERT INTO _migrations (id) VALUES (?)`,
+  const insertMigration = db.prepare(
+    "INSERT INTO _migrations (id, checksum) VALUES (?, ?)",
   );
 
   for (const migration of allMigrations) {
     const { id, filename, up } = migration;
+    const checksum = createHash("sha256").update(up).digest("hex");
 
-    try {
-      db.exec("BEGIN");
-      db.exec(up);
-      clearMigrations.run();
-      insertMigrationId.run(id);
-      db.exec("COMMIT");
+    const isApplied = appliedMigrations.find((m) => m.id === id);
+    if (isApplied) {
+      if (isApplied.checksum !== checksum) {
+        throw new Error(`checksum mismatch for migration ${filename}`);
+      }
+    } else {
+      try {
+        db.exec("BEGIN");
+        db.exec(up);
+        insertMigration.run(id, checksum);
+        db.exec("COMMIT");
 
-      console.log(`finished migration: ${filename}`);
-    } catch (err) {
-      db.exec("ROLLBACK");
-      console.log(`failed when executing migration: ${filename}`);
-      throw err;
+        console.log(`finished migration: ${filename}`);
+      } catch (err) {
+        db.exec("ROLLBACK");
+        console.log(`failed when executing migration: ${filename}`);
+        throw err;
+      }
     }
   }
 }
