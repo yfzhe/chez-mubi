@@ -1,5 +1,20 @@
 import { z } from "zod";
 
+const ArtworkSchema = z.object({
+  format: z.string(),
+  locale: z.nullable(z.string()),
+  image_url: z.url(),
+  focal_point: z.object({
+    x: z.number(),
+    y: z.number(),
+  }),
+});
+
+const OptimisedTrailerSchema = z.object({
+  url: z.url(),
+  profile: z.string(),
+});
+
 const EpisodeSchema = z.object({
   label: z.string(),
   number: z.number(),
@@ -15,11 +30,7 @@ const EpisodeSchema = z.object({
   season_id: z.number(),
   episode_label: z.string(),
   episode_season_label: z.string(),
-});
-
-const OptimisedTrailerSchema = z.object({
-  url: z.url(),
-  profile: z.string(),
+  artworks: z.optional(z.array(ArtworkSchema)),
 });
 
 const SeasonSchema = z.object({
@@ -32,10 +43,10 @@ const SeasonSchema = z.object({
   release_year: z.number(),
   trailer_url: z.nullable(z.url()),
   trailer_id: z.nullable(z.number()),
+  optimised_trailers: z.nullable(z.array(OptimisedTrailerSchema)),
   episode_count: z.number(),
   short_synopsis: z.string(),
   default_editorial: z.string(),
-  optimised_trailers: z.nullable(z.array(OptimisedTrailerSchema)),
 });
 
 const SeriesSchema = z.object({
@@ -65,6 +76,7 @@ const SeriesSchema = z.object({
   short_synopsis: z.string(),
   default_editorial: z.string(),
   seasons: z.array(SeasonSchema),
+  artworks: z.array(ArtworkSchema),
 });
 
 const ConsumableSchema = z.object({
@@ -128,6 +140,7 @@ export const FilmSchema = z.object({
   trailer_id: z.nullable(z.number()),
   trailer_url: z.nullable(z.url()),
   optimised_trailers: z.nullable(z.array(OptimisedTrailerSchema)),
+  artworks: z.array(ArtworkSchema),
   series: z.nullable(SeriesSchema),
   episode: z.nullable(EpisodeSchema),
 });

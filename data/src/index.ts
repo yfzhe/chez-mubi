@@ -3,7 +3,7 @@ import { z } from "zod";
 import { FilmSchema, type Film } from "./schema.ts";
 import migrate from "./migrate.ts";
 import { sleep } from "./utils.ts";
-import { COUNTRY_CODE_TO_NAME } from "./constant.ts";
+import { COUNTRY_CODES, FILM_TYPE } from "./constant.ts";
 
 const FilmsResponseSchema = z.object({
   films: z.array(FilmSchema),
@@ -74,6 +74,54 @@ function upsertFilm(db: DatabaseSync, film: Film) {
   );
 }
 
+// on tv series:
+// the mubi api endpoint `/films` also returns episodes of tv series as `Film`
+// objects (see `{Episode, Series, Season}Schema` in schema.ts).
+// observed that only one episode per series appears in the response.
+// therefore, store series data to the `films` table by the following strategy:
+// - `film.id` is taken from `episode_as_film.id`,
+// - `film.slug` from `episode_as_film.series.slug` (to construct "web_url"),
+// - `film_consumable` from `episode_as_film` (as the availability data on the
+//     series lacks the precise available_at and expires_at times).
+
+function upsertEpisodeFilm(db: DatabaseSync, film: Film) {
+  const series = film.series!;
+  const stillUrl =
+    series.artworks.find((a) => a.format === "tile_artwork")?.image_url ?? null;
+  const trailerUrl = series.seasons[0]?.trailer_url ?? null;
+
+  db.prepare(
+    `INSERT INTO films (
+      id, slug, title, original_title, directors, year, duration,
+      synopsis, editorial, still_url, trailer_url, average_colour_hex,
+      average_rating, number_of_ratings, popularity,
+      type
+    ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16)
+    ON CONFLICT(id) DO UPDATE SET
+      average_rating=excluded.average_rating,
+      number_of_ratings=excluded.number_of_ratings,
+      popularity=excluded.popularity;
+    `,
+  ).run(
+    film.id,
+    series.slug,
+    series.title,
+    series.original_title,
+    film.directors.map((d) => d.name).join(", "),
+    film.year,
+    0, // cannot access the total duration of all episodes of the series
+    film.short_synopsis,
+    film.default_editorial,
+    stillUrl,
+    trailerUrl,
+    film.average_colour_hex,
+    series.average_rating_out_of_ten,
+    series.number_of_ratings,
+    film.popularity,
+    FILM_TYPE.series,
+  );
+}
+
 function upsertFilmConsumable(
   db: DatabaseSync,
   film: Film,
@@ -103,17 +151,20 @@ function upsertFilmConsumable(
 const db = new DatabaseSync("data.db");
 migrate(db);
 
-const allCountryCodes = Object.keys(COUNTRY_CODE_TO_NAME);
-
-for (const countryCode of allCountryCodes) {
+for (const countryCode of COUNTRY_CODES) {
   console.log(`fetching films availables in ${countryCode}...`);
 
   let page: number | null = 1;
   do {
     const result = await loadFilms(countryCode, page);
     for (const film of result.films) {
-      upsertFilm(db, film);
-      upsertFilmConsumable(db, film, countryCode);
+      if (film.episode) {
+        upsertEpisodeFilm(db, film);
+        upsertFilmConsumable(db, film, countryCode);
+      } else {
+        upsertFilm(db, film);
+        upsertFilmConsumable(db, film, countryCode);
+      }
     }
     page = result.meta.next_page;
     await sleep(600);
