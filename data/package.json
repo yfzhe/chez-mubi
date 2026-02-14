@@ -1,15 +1,13 @@
 {
   "name": "chez-mubi-data",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "author": "yfzhe",
   "scripts": {
+    "fetch": "node src/index.ts",
     "test": "node --test \"test/**/*.spec.js\"",
     "typecheck": "tsc --noEmit"
-  },
-  "engines": {
-    "node": ">= 24.0.0"
   },
   "dependencies": {
     "zod": "^4.3.6"
