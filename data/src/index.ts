@@ -1,3 +1,4 @@
+import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { z } from "zod";
 import { FilmSchema, type Film } from "./schema.ts";
@@ -148,7 +149,8 @@ function upsertFilmConsumable(
 }
 
 // --------------- MAIN ---------------
-const db = new DatabaseSync("data.db");
+const dbPath = path.resolve(import.meta.dirname, "../data.sqlite");
+const db = new DatabaseSync(dbPath);
 migrate(db);
 
 for (const countryCode of COUNTRY_CODES) {
