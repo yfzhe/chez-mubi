@@ -1,0 +1,31 @@
+{
+  "name": "chez-mubi-app",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "rsbuild build",
+    "dev": "rsbuild dev --open",
+    "lint": "eslint .",
+    "preview": "rsbuild preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@sqlite.org/sqlite-wasm": "3.51.2-build6",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@rsbuild/core": "^1.7.1",
+    "@rsbuild/plugin-basic-ssl": "^1.2.2",
+    "@rsbuild/plugin-react": "^1.4.2",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "typescript-eslint": "^8.48.0"
+  }
+}
