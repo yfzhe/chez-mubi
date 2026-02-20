@@ -5,9 +5,9 @@
   "type": "module",
   "author": "yfzhe",
   "scripts": {
-    "fetch": "node src/index.ts",
     "test": "node --test \"test/**/*.spec.js\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "update-db": "node src/index.ts"
   },
   "dependencies": {
     "zod": "^4.3.6"

@@ -1,0 +1,64 @@
+name: update data
+
+permissions:
+  contents: write
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  update-db:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout (code)
+        uses: actions/checkout@v6
+        with:
+          path: code
+
+      - name: checkout (db file)
+        uses: actions/checkout@v6
+        with:
+          ref: db
+          path: db
+          lfs: true
+
+      - name: setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: "./code/.node-version"
+
+      - name: setup pnpm and install dependencies
+        working-directory: ./code
+        run: |
+          corepack enable
+          corepack install
+
+          pnpm install
+
+      - name: prepare
+        run: |
+          if [ -f "./db/data.sqlite" ]; then
+            cp ./db/data.sqlite ./code/data/data.sqlite
+          fi
+
+      - name: run script
+        working-directory: ./code
+        run: |
+          pnpm --filter chez-mubi-data run update-db
+
+      - name: write back
+        run: |
+          cp -f ./code/data/data.sqlite ./db/data.sqlite
+
+      - name: push
+        working-directory: ./db
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add data.sqlite
+          git commit -m "update data"
+
+          git push origin db
