@@ -39,9 +39,7 @@ async function loadFilms(
   });
 
   const result = await resp.json();
-  FilmsResponseSchema.parse(result);
-
-  return result;
+  return FilmsResponseSchema.parse(result);
 }
 
 function upsertFilm(db: DatabaseSync, film: Film) {
