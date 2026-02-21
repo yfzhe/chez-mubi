@@ -1,0 +1,38 @@
+name: check
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          cache: true
+
+      - name: setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: ".node-version"
+
+      - name: install dependencies
+        run: pnpm install
+
+      - name: typecheck
+        run: pnpm -r run typecheck
+
+      - name: lint
+        run: pnpm -r run lint
+
+      - name: unit-test
+        run: pnpm -r run test
