@@ -1,3 +1,6 @@
+# acknowledgments:
+# these api are found in https://github.com/finnp/mubi-by-country
+
 :country = FR
 :page = 1
 
@@ -13,3 +16,7 @@ GET https://api.mubi.com/v4/browse/lists
 Client: web
 Client-Country: :country
 Content-Type: application/json
+
+# Local Variables:
+# mode: restclient
+# End:
