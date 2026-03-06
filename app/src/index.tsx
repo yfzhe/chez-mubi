@@ -16,9 +16,7 @@ if (rootEl) {
   const root = createRoot(rootEl);
   root.render(
     <StrictMode>
-      <DatabaseProvider>
-        <App />
-      </DatabaseProvider>
+      <RouterProvider router={router} />
     </StrictMode>,
   );
 }

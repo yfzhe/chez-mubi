@@ -1,19 +1,17 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
+/* eslint-disable react-refresh/only-export-components */
+// what the hell is the best practice for the context-provider pattern with react refresh.
+// splitting files is inconvenient and difficult to control exports.
+
+import { createContext, useContext, type ReactNode } from "react";
 import sqlite3InitModule, { type Database } from "@sqlite.org/sqlite-wasm";
 
 // TODO: improve database file url
-// TODO: add error toast when initializing database
+// TODO: display errors when initializing database
 // TODO: consider sqlite-wasm worker api
 
 const DB_URL = new URL("../../data/data.sqlite", import.meta.url);
 
-const initDatabase = async (): Promise<Database> => {
+export const initDatabase = async (): Promise<Database> => {
   const resp = await fetch(DB_URL);
   if (!resp.ok) {
     throw new Error(`failed to fetch database: ${resp.status}`);
@@ -37,52 +35,28 @@ const initDatabase = async (): Promise<Database> => {
   return db;
 };
 
-export type DatabaseState =
-  | { status: "success"; db: Database }
-  | { status: "initial" | "loading" | "error"; db: null };
-
-const DatabaseContext = createContext<DatabaseState>({
-  status: "initial",
-  db: null,
-});
+const DatabaseContext = createContext<Database | null>(null);
 
 interface DatabaseProviderProps {
   children: ReactNode;
+  value: Database;
 }
 
-export const DatabaseProvider = ({ children }: DatabaseProviderProps) => {
-  const [state, setState] = useState<DatabaseState>({
-    status: "loading",
-    db: null,
-  });
-
-  useEffect(() => {
-    let db: Database | null = null;
-
-    initDatabase()
-      .then((_db) => {
-        db = _db;
-        setState({ status: "success", db: _db });
-      })
-      .catch(() => {
-        setState({ status: "error", db: null });
-      });
-
-    return () => {
-      db?.close();
-    };
-  }, []);
-
+export const DatabaseProvider = ({
+  children,
+  value,
+}: DatabaseProviderProps) => {
   return (
-    <DatabaseContext.Provider value={state}>
+    <DatabaseContext.Provider value={value}>
       {children}
     </DatabaseContext.Provider>
   );
 };
 
-// what the hell is the best practice for the context-provider pattern with react refresh.
-// splitting files is inconvenient and difficult to control exports.
-// eslint-disable-next-line react-refresh/only-export-components
-export const useDatabase = (): DatabaseState => {
-  return useContext(DatabaseContext);
+export const useDatabase = (): Database => {
+  const context = useContext(DatabaseContext);
+  if (!context) {
+    throw new Error("the value of DatabaseContext is null");
+  }
+  return context;
 };
