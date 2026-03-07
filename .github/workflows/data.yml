@@ -58,7 +58,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+          git checkout --orphan latest-db
+          git add .gitattributes
           git add data.sqlite
           git commit -m "update data"
 
-          git push origin db
+          git push origin latest-db:db --force
