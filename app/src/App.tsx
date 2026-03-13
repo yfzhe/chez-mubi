@@ -1,6 +1,7 @@
 import { Suspense, use } from "react";
 import { Outlet } from "react-router";
 import { initDatabase, DatabaseProvider } from "./database";
+import "./App.css";
 
 const initDatabasePromise = initDatabase();
 
