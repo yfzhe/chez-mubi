@@ -8,7 +8,14 @@ import "normalize.css";
 const router = createBrowserRouter([
   {
     element: <App />,
-    children: [],
+    children: [
+      {
+        path: "query",
+        lazy: async () => ({
+          Component: (await import("./routes/Query")).default,
+        }),
+      },
+    ],
   },
 ]);
 
