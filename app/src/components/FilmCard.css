@@ -1,0 +1,52 @@
+.film-card {
+  border: 1px solid #e0ddd6;
+  background: #ffffff;
+}
+
+.film-card-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #ece8df;
+}
+
+.film-card-content {
+  padding: 14px;
+}
+
+.film-card-content h2 {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+.film-card-original-title,
+.film-card-meta {
+  margin: 8px 0 0;
+  color: #5f5a52;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.film-card-original-title {
+  margin-top: 3px;
+  font-size: 12px;
+}
+
+.film-card-rating {
+  color: #171512;
+  font-weight: 700;
+}
+
+.film-card-duration,
+.film-card-rating-separator {
+  color: #5f5a52;
+  font-weight: 400;
+}
+
+.film-card-rating-count {
+  color: #5f5a52;
+  font-weight: 400;
+  margin-left: 0.25em;
+}
