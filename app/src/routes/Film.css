@@ -1,0 +1,174 @@
+.film-page {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+.film-page-empty {
+  min-height: 55vh;
+}
+
+.film-still {
+  position: relative;
+  min-height: 560px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.film-still-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 560px;
+  object-fit: cover;
+}
+
+.film-still::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  content: "";
+  background: linear-gradient(
+    180deg,
+    rgb(0 0 0 / 0.12) 0%,
+    rgb(0 0 0 / 0.72) 100%
+  );
+}
+
+.film-still-overlay {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 2;
+  padding: 32px;
+  color: #ffffff;
+}
+
+.film-original-title {
+  margin: 0;
+  color: rgb(255 255 255 / 0.82);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.film-still h1 {
+  max-width: 760px;
+  margin: 8px 0 0;
+  font-size: 48px;
+  line-height: 1.05;
+}
+
+.film-original-title {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+.film-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 40px;
+  padding: 32px 24px 0;
+}
+
+.film-text-section + .film-text-section {
+  margin-top: 28px;
+}
+
+.film-text-section h2 {
+  margin: 0 0 10px;
+  font-size: 22px;
+  line-height: 1.25;
+}
+
+.film-text-section p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.film-availability {
+  margin-top: 28px;
+}
+
+.film-availability h2 {
+  margin: 0 0 12px;
+  font-size: 22px;
+  line-height: 1.25;
+}
+
+.film-availability ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.film-availability li {
+  border: 1px solid #e0ddd6;
+  padding: 6px 9px;
+  background: #ffffff;
+  color: #171512;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.film-metadata {
+  border-left: 1px solid #e0ddd6;
+  padding-left: 24px;
+}
+
+.film-metadata dl {
+  margin: 0;
+}
+
+.film-metadata div + div {
+  margin-top: 18px;
+}
+
+.film-metadata dt {
+  color: #7a746a;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.film-metadata dd {
+  margin: 5px 0 0;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+@media (max-width: 720px) {
+  .film-page {
+    padding-bottom: 36px;
+  }
+
+  .film-still,
+  .film-still-image {
+    min-height: 380px;
+  }
+
+  .film-still-overlay {
+    padding: 22px;
+  }
+
+  .film-still h1 {
+    font-size: 34px;
+  }
+
+  .film-content {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-inline: 16px;
+  }
+
+  .film-metadata {
+    border-left: 0;
+    border-top: 1px solid #e0ddd6;
+    padding: 24px 0 0;
+  }
+}

@@ -4,6 +4,7 @@ import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import App from "./App";
 import Index from "./routes/Index";
+import Film from "./routes/Film";
 import "normalize.css";
 
 const router = createBrowserRouter([
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
       {
         index: true,
         Component: Index,
+      },
+      {
+        path: "films/:slug",
+        Component: Film,
       },
       {
         path: "query",

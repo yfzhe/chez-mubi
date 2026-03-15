@@ -10,3 +10,16 @@ export interface FilmSimple {
   averageRating: number | null;
   numberOfRatings: number | null;
 }
+
+export interface FilmDetail extends FilmSimple {
+  synopsis: string;
+  editorial: string | null;
+  averageColourHex: string;
+  consumables: FilmConsumable[];
+}
+
+export interface FilmConsumable {
+  countryCode: string;
+  availableAt: string | null;
+  expiresAt: string | null;
+}
