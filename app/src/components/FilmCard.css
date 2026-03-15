@@ -1,6 +1,9 @@
 .film-card {
+  display: block;
   border: 1px solid #e0ddd6;
   background: #ffffff;
+  color: inherit;
+  text-decoration: none;
 }
 
 .film-card-image {

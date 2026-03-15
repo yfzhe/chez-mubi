@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import type { FilmSimple } from "../types";
 import "./FilmCard.css";
 
@@ -7,10 +8,10 @@ interface FilmCardProps {
 
 const FilmCard = ({ film }: FilmCardProps) => {
   return (
-    <div className="film-card">
+    <Link to={`/films/${film.slug}`} className="film-card">
       <img
         src={film.stillUrl}
-        alt={`Cover image for ${film.title}`}
+        alt={`Still from ${film.title}`}
         loading="lazy"
         className="film-card-image"
       />
@@ -39,7 +40,7 @@ const FilmCard = ({ film }: FilmCardProps) => {
           )}
         </p>
       </div>
-    </div>
+    </Link>
   );
 };
 
