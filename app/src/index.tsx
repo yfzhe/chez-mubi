@@ -5,6 +5,7 @@ import { RouterProvider } from "react-router/dom";
 import App from "./App";
 import Index from "./routes/Index";
 import Film from "./routes/Film";
+import Random from "./routes/Random";
 import "normalize.css";
 
 const router = createBrowserRouter([
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: "films/:slug",
         Component: Film,
+      },
+      {
+        path: "random",
+        Component: Random,
       },
       {
         path: "query",
