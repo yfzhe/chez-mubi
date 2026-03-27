@@ -1,7 +1,7 @@
 import { Suspense, use } from "react";
 import { Outlet, ScrollRestoration } from "react-router";
 import { initDatabase, DatabaseProvider } from "./database";
-import "./App.css";
+import "./RootLayout.css";
 
 const initDatabasePromise = initDatabase();
 
@@ -16,7 +16,7 @@ const AppContent = () => {
   );
 };
 
-const App = () => {
+const RootLayout = () => {
   return (
     <Suspense fallback={<div>Initializing database...</div>}>
       <AppContent />
@@ -24,4 +24,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default RootLayout;

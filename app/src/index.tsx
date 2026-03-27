@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
-import App from "./App";
+import RootLayout from "./RootLayout";
 import Index from "./routes/Index";
 import Film from "./routes/Film";
 import Random from "./routes/Random";
@@ -10,7 +10,7 @@ import "normalize.css";
 
 const router = createBrowserRouter([
   {
-    element: <App />,
+    element: <RootLayout />,
     children: [
       {
         index: true,
